@@ -1,0 +1,67 @@
+[
+  {
+    "id": 1,
+    "title": "Pintura Látex Interior 20L",
+    "description": "Pintura látex para interiores, acabado mate, alta durabilidad.",
+    "code": "PNT-INT-20L",
+    "price": 50000,
+    "status": true,
+    "stock": 20,
+    "category": "Pinturas",
+    "thumbnails": [
+      "images/pinturas/latex_interior_20l.jpg"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Pintura Sintética Brillante 4L",
+    "description": "Esmalte sintético brillante para metal y madera. Secado rápido.",
+    "code": "PNT-SNT-4L",
+    "price": 12000,
+    "status": true,
+    "stock": 25,
+    "category": "Pinturas",
+    "thumbnails": [
+      "images/pinturas/sintetico_brillante_4l.jpg"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Rodillo de Lana 22cm",
+    "description": "Rodillo para pintura con mango ergonómico y funda lavable.",
+    "code": "RD-22CM",
+    "price": 3500,
+    "status": true,
+    "stock": 60,
+    "category": "Materiales de Construcción",
+    "thumbnails": [
+      "images/materiales/rodillo_22cm.jpg"
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Lámina de Durlock 120x240cm",
+    "description": "Placa de yeso estándar para interiores, fácil instalación.",
+    "code": "DRLK-120240",
+    "price": 8900,
+    "status": true,
+    "stock": 40,
+    "category": "Materiales de Construcción",
+    "thumbnails": [
+      "images/materiales/durlock_120x240.jpg"
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Laca de Exteriores",
+    "description": "Laca sintética para maderas al exterior. Incluye tinte.",
+    "code": "022",
+    "price": 20000,
+    "status": true,
+    "stock": 15,
+    "category": "Laca",
+    "thumbnails": [
+      "sin-imagen"
+    ]
+  }
+]

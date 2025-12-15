@@ -1,0 +1,17 @@
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+main{
+    font-family: Arial, sans-serif;
+    margin: 2rem 5rem;
+}
+.card-conteiner{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 20%;
+    gap: 1rem;
+    margin-bottom: 5rem;
+}

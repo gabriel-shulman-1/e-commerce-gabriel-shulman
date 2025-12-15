@@ -1,0 +1,21 @@
+<h1>Listado de Productos</h1>
+
+{{#if products.length}}
+  <ul class="row gap-3 wrap" >
+    {{#each products}}
+      <li class="card" style="width: 15rem;">
+        <div class="card-body">
+          <strong>{{title}}</strong><br />
+          {{description}}<br />
+          Precio: ${{price}}<br />
+          Stock:
+          {{stock}}<br />
+          Categoría:
+          {{category}}
+        </div>
+      </li>
+    {{/each}}
+  </ul>
+{{else}}
+  <p>No hay productos disponibles.</p>
+{{/if}}
