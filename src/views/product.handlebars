@@ -1,0 +1,60 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-6">
+      {{! Imagen si la hubiera }}
+      <img
+        src="{{product.thumbnail}}"
+        alt="{{product.title}}"
+        class="img-fluid rounded border"
+      />
+    </div>
+
+    <div class="col-md-6">
+      <h2>{{product.title}}</h2>
+      <p>{{product.description}}</p>
+      <p><strong>Precio:</strong> ${{product.price}}</p>
+      <p><strong>Stock:</strong> {{product.stock}}</p>
+      <div class="d-flex align-items-center gap-2">
+        <div class="input-group">
+          <button
+            class="btn btn-outline-secondary"
+            onclick="updateQty('{{product._id}}', -1)"
+          >-</button>
+          <input
+            id="qty-{{product._id}}"
+            type="number"
+            min="1"
+            max="{{product.stock}}"
+            value="1"
+            class="form-control text-center"
+            style="width: 70px;"
+          />
+          <button
+            class="btn btn-outline-secondary"
+            onclick="updateQty('{{product._id}}', 1)"
+          >+</button>
+        </div>
+        <button
+          class="btn btn-primary w-100"
+          onclick="addToCart('{{product._id}}')"
+        >
+          Agregar al carrito
+        </button>
+      </div>
+
+      <div class="mt-3 ">
+        <a class="btn btn-danger text-white " href="/products-rt">Volver</a>
+      </div>
+    </div>
+  </div>
+</div>
+<a
+  class="btn btn-primary position-fixed top-0 end-0 m-4 shadow"
+  id="cartCount"
+  href="/cart"
+>
+  <i class="bi bi-cart"></i>
+  Cart
+</a>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realtimeProducts.js"></script>

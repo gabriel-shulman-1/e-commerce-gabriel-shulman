@@ -1,0 +1,116 @@
+<form class="d-flex gap-2 mb-3" method="get" action="/products-filtered">
+
+  <select name="filter" class="form-select" style="width: 180px;">
+    <option value="">Buscar en todo</option>
+    {{#each filters}}
+      <option value="{{this}}" {{#if (eq ../applied.filter this)}}selected{{/if}}>
+        {{this}}
+      </option>
+    {{/each}}
+  </select>
+
+  <input
+    type="text"
+    name="query"
+    value="{{applied.query}}"
+    class="form-control"
+    placeholder="Buscar producto…"
+  />
+
+  <select name="sort" class="form-select" style="width: 180px;">
+    <option value="">Sin orden</option>
+    <option value="asc"  {{#if (eq applied.sort "asc")}}selected{{/if}}>Precio asc</option>
+    <option value="desc" {{#if (eq applied.sort "desc")}}selected{{/if}}>Precio desc</option>
+  </select>
+
+  <div class="col-md-2">
+    <input type="number" min="0" class="form-control" name="priceMin" placeholder="Precio mínimo"
+           value="{{applied.priceMin}}">
+  </div>
+
+  <div class="col-md-2">
+    <input type="number" min="0" class="form-control" name="priceMax" placeholder="Precio máximo"
+           value="{{applied.priceMax}}">
+  </div>
+
+  <button class="btn btn-primary">Aplicar</button>
+
+</form>
+
+<div class="row">
+  {{#each products}}
+    <div class="col-md-4 mb-3">
+      <div class="card p-2">
+        <h5>{{this.title}}</h5>
+        <p>{{this.description}}</p>
+        <strong>${{this.price}}</strong>
+
+        <div class="d-flex align-items-center gap-2 mt-2">
+
+          <a href="/product/{{this._id}}" class="btn btn-primary btn-sm">
+            <i class="bi bi-search"></i>
+          </a>
+
+          <div class="input-group" style="width: 140px;">
+            <button onclick="updateQty('{{this._id}}', -1)" class="btn btn-outline-secondary">-</button>
+            <input id="qty-{{this._id}}" type="number" class="form-control text-center" value="1" min="1" max="{{this.stock}}">
+            <button onclick="updateQty('{{this._id}}', +1)" class="btn btn-outline-secondary">+</button>
+          </div>
+
+          <button onclick="addToCart('{{this._id}}')" class="btn btn-success btn-sm">
+            <i class="bi bi-cart-plus"></i>
+          </button>
+
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</div>
+
+<nav>
+  <ul class="pagination justify-content-center">
+    {{#if pagination}}
+      {{#if (gt pagination.page 1)}}
+        <li class="page-item">
+          <a
+            class="page-link"
+            href="/products-filtered?page={{decrement
+              pagination.page
+            }}&limit={{pagination.limit}}"
+          >Anterior</a>
+        </li>
+      {{/if}}
+
+      <li class="page-item disabled">
+        <span class="page-link">
+          Página
+          {{pagination.page}}
+          de
+          {{pagination.totalPages}}
+        </span>
+      </li>
+
+      {{#if (lt pagination.page pagination.totalPages)}}
+        <li class="page-item">
+          <a
+            class="page-link"
+            href="/products-filtered?page={{increment
+              pagination.page
+            }}&limit={{pagination.limit}}"
+          >Siguiente</a>
+        </li>
+      {{/if}}
+    {{/if}}
+  </ul>
+</nav>
+
+<a
+  class="btn btn-primary position-fixed top-0 end-0 m-4 shadow"
+  id="cartCount"
+  href="/cart"
+>
+  <i class="bi bi-cart"></i>
+  Cart
+</a>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realtimeFiltered.js"></script>

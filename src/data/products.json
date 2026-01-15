@@ -63,5 +63,18 @@
     "thumbnails": [
       "sin-imagen"
     ]
+  },
+  {
+    "id": 6,
+    "title": "tarquini",
+    "description": "para exteriores",
+    "code": "059",
+    "price": 60000,
+    "status": true,
+    "stock": 30,
+    "category": "pinturas",
+    "thumbnails": [
+      "sin-imagen"
+    ]
   }
 ]

@@ -1,0 +1,29 @@
+<h2>Carrito</h2>
+
+<div class="d-flex justify-content-between align-items-center my-3">
+  <h4>Total productos: <span id="cartTotal">{{cart.totalItems}}</span></h4>
+
+  <button class="btn btn-danger" onclick="clearCart()">
+    Vaciar carrito
+  </button>
+</div>
+
+<div class="container mt-4">
+  <h2>Carrito</h2>
+  <div id="cartTotal" class="mb-3 fw-bold"></div>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Cantidad</th>
+        <th>Acciones</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <tbody id="cartBody"></tbody>
+  </table>
+  <button id="purchaseBtn" class="btn btn-success">Comprar</button>
+  <button class="btn btn-danger" onclick="clearCart()">Vaciar carrito</button>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realtimeCart.js"></script>
