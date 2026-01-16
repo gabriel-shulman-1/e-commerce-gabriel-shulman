@@ -16,10 +16,12 @@ const ProductService = {
   },
   async update(id, data) {
     const updated = await ProductRepo.update(id, data);
+    console.log(updated);
     if (!updated) throw new Error("Product not found");
     return updated;
   },
   async delete(id) {
+    console.log(id)
     const deleted = await ProductRepo.delete(id);
     if (!deleted) throw new Error("Product not found");
     return deleted;

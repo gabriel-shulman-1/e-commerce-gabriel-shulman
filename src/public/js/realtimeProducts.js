@@ -1,6 +1,8 @@
 const socket = io();
 const container = document.getElementById("products-container");
 const form = document.getElementById("productForm");
+const select = document.getElementById("productSelect");
+const btnDelete = document.getElementById("btnDelete");
 let editingId = null;
 socket.emit("get-products");
 socket.on("products-list", (products) => {
@@ -49,11 +51,26 @@ window.addToCart = (id) => {
 };
 window.viewProduct = function (id) {
   window.location.href = `/product/${id}`;
-}
+};
 socket.emit("cart:getCount");
 socket.on("cart:count", (count) => {
   const btn = document.getElementById("cartCount");
-  if (btn) btn.innerText = String(count);
+  if (btn) {
+    if (count === 0) {
+      btn.innerHTML = '<i class="bi bi-cart"></i> Sin elementos';
+    } else {
+      btn.innerText = count + " elementos";
+    }
+  }
+});
+socket.on("product:data", (product) => {
+  document.getElementById("productId").value = product._id;
+  document.getElementById("title").value = product.title;
+  document.getElementById("description").value = product.description;
+  document.getElementById("code").value = product.code;
+  document.getElementById("price").value = product.price;
+  document.getElementById("stock").value = product.stock;
+  document.getElementById("category").value = product.category;
 });
 function deleteProduct(id) {
   Swal.fire({
@@ -112,11 +129,45 @@ form.addEventListener("submit", (e) => {
     category: category.value,
   };
   if (editingId) {
-    socket.emit("products:update", { id: editingId, data });
+    console.log(editingId, data);
+    socket.emit("product:update", { id: editingId, data });
+    Swal.fire("Producto actualizado", "", "success");
   } else {
-    socket.emit("products:create", data);
+    socket.emit("product:create", data);
+    Swal.fire("Producto creado", "", "success");
   }
   form.reset();
-  editingId = null;
-  bootstrap.Offcanvas.getInstance(productOffcanvas).hide();
 });
+select.addEventListener("change", async (e) => {
+  btnDelete.disabled = false;
+  const id = e.target.value;
+  if (!id) return clearForm();
+  const res = await fetch(`/api/products/${id}`);
+  const product = await res.json();
+  editingId = product._id;
+  loadForm(product);
+});
+function loadForm(p) {
+  document.getElementById("productId").value = p._id;
+  document.getElementById("title").value = p.title || "";
+  document.getElementById("description").value = p.description || "";
+  document.getElementById("code").value = p.code || "";
+  document.getElementById("price").value = p.price || "";
+  document.getElementById("stock").value = p.stock || "";
+  document.getElementById("category").value = p.category || "";
+}
+function clearForm() {
+  document.getElementById("productForm").reset();
+}
+btnDelete.disabled = true;
+btnDelete.onclick = () => {
+  if (!editingId) return;
+  if (confirm("¿Seguro que deseas eliminar este producto?")) {
+    socket.emit("delete-product", editingId);
+    alert("Producto eliminado");
+    form.reset();
+    editingId = null;
+    btnDelete.disabled = true;
+    socket.emit("products:get");
+  }
+};

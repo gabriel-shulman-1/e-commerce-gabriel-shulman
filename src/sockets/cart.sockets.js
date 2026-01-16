@@ -2,7 +2,7 @@ const CartService = require("../services/cart.services");
 
 module.exports = (io, socket) => {
   socket.on("cart:getCount", async () => {
-    const count = await CartService.getCount();
+    let count = await CartService.getCount();
     socket.emit("cart:count", count);
   });
 

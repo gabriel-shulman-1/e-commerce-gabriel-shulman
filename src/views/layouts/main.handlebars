@@ -17,11 +17,12 @@
         <div class="container">
           <a class="navbar-brand" href="/">Home</a>
           <div>
-            <a class="btn btn-outline-light me-2" href="/products">
-              Productos
-            </a>
+            <a class="btn btn-outline-warning"  href="/createProduct">Gestionar productos</a>
             <a class="btn btn-outline-success" href="/products-rt">
               Productos RT
+            </a>
+            <a class="btn btn-outline-success" href="/products-filtered">
+              Productos con filtro
             </a>
           </div>
         </div>
@@ -36,5 +37,6 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{> footer}}
   </body>
 </html>

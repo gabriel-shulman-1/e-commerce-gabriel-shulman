@@ -10,10 +10,11 @@ const ProductRepo = {
     return Product.create(data);
   },
   async update(id, data) {
-    return Product.findOneAndUpdate({ id }, data, { new: true }).lean();
+    console.log(id+" " + data)
+    return Product.findOneAndUpdate({ _id: id }, data, { new: true }).lean();
   },
   async delete(id) {
-    return Product.findOneAndDelete({ id }).lean();
+    return Product.findOneAndDelete({ _id: id }).lean();
   },
   async listPaginated(filter = {}, options = {}) {
     const result = await Product.paginate(filter, options);

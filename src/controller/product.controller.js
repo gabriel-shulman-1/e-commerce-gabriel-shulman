@@ -21,9 +21,7 @@ const ProductController = {
   create: async (req, res) => {
     try {
       const product = await ProductService.create(req.body);
-
       req.io.emit("product:created", product);
-
       res.status(201).json(product);
     } catch (err) {
       res.status(400).json({ error: err.message });
@@ -32,9 +30,7 @@ const ProductController = {
   update: async (req, res) => {
     try {
       const product = await ProductService.update(req.params.id, req.body);
-
       req.io.emit("product:updated", product);
-
       res.json(product);
     } catch (err) {
       res.status(404).json({ error: err.message });
@@ -71,6 +67,15 @@ const ProductController = {
     } catch (err) {
       next(err);
     }
+  },
+  editProduct: async (req, res) => {
+    try {
+    const product = await ProductRepository.findById(req.params.id);
+    if (!product) return res.status(404).json({ error: "No encontrado" });
+    res.json(product);
+  } catch (e) {
+    res.status(500).json({ error: "Error del servidor" });
+  }
   },
 };
 

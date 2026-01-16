@@ -20,8 +20,17 @@ module.exports = (io, socket) => {
     io.emit("products-list", products);
   });
   socket.on("delete-product", async (id) => {
+    console.log(id);
     await ProductService.delete(id);
     const products = await ProductService.list();
     io.emit("products-list", products);
+  });
+  socket.on("product:get", async (id) => {
+    const product = await ProductService.findById(id);
+    socket.emit("product:data", product);
+  });
+  socket.on("product:update", async ({ id, data }) => {
+    const updated = await ProductService.update(id, data);
+    io.emit("product:updated", updated);
   });
 };

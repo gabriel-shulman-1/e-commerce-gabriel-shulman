@@ -35,6 +35,7 @@ app.engine(
     extname: ".handlebars",
     defaultLayout: "main",
     layoutsDir: path.join(__dirname, "src", "views", "layouts"),
+    partialsDir: path.join(__dirname, "src", "views", "partials"),
     helpers: {
     increment: (v) => v + 1,
     decrement: (v) => v - 1,
@@ -60,7 +61,6 @@ app.use("/api/products", products);
 app.use("/api/cart", cart);
 
 io.on("connection", (socket) => {
-  console.log("Client connected:", socket.id);
   productSocket(io, socket);
   cartSocket(io, socket);
 });

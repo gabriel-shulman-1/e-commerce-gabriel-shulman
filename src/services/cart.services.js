@@ -8,9 +8,7 @@ class CartService {
 
   async getCount() {
     const cart = await CartRepository.getCart();
-    console.log(cart);
     const count = cart.products.reduce((acc, p) => acc + p.quantity, 0);
-    console.log(count);
     return count;
   }
 
@@ -36,7 +34,6 @@ class CartService {
 
   async purchase() {
     const cart = await CartRepository.getCart();
-    console.log("carrito repository ", cart);
     if (!cart || !cart.products || cart.products.length === 0) {
       throw new Error("Carrito vacío");
     }

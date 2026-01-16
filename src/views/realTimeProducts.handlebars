@@ -6,78 +6,13 @@
 </div>
 
 <a
-  class="btn btn-primary position-fixed top-0 end-0 m-4 shadow"
+  class="btn btn-primary position-fixed bottom-0  end-0 m-4 shadow"
   id="cartCount"
   href="/cart"
 >
   <i class="bi bi-cart"></i>
   Cart
 </a>
-<button
-  class="btn btn-success position-fixed bottom-0 end-0 m-4 shadow"
-  onclick="openCreateForm()"
->
-  Agregar producto
-</button>
-
-<div class="offcanvas offcanvas-end" tabindex="-1" id="productOffcanvas">
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="offcanvasTitle">Nuevo producto</h5>
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="offcanvas"
-    ></button>
-  </div>
-
-  <div class="offcanvas-body">
-    <form id="productForm">
-      <input type="hidden" id="productId" />
-
-      <div class="mb-2">
-        <input class="form-control" id="title" placeholder="Título" required />
-      </div>
-
-      <div class="mb-2">
-        <textarea
-          class="form-control"
-          id="description"
-          placeholder="Descripción"
-        ></textarea>
-      </div>
-
-      <div class="mb-2">
-        <input class="form-control" id="code" placeholder="Código" required />
-      </div>
-
-      <div class="mb-2">
-        <input
-          type="number"
-          class="form-control"
-          id="price"
-          placeholder="Precio"
-          required
-        />
-      </div>
-
-      <div class="mb-2">
-        <input
-          type="number"
-          class="form-control"
-          id="stock"
-          placeholder="Stock"
-          required
-        />
-      </div>
-
-      <div class="mb-3">
-        <input class="form-control" id="category" placeholder="Categoría" />
-      </div>
-
-      <button class="btn btn-success w-100">Guardar</button>
-    </form>
-  </div>
-</div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/realtimeProducts.js"></script>

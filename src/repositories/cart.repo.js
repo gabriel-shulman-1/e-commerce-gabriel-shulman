@@ -2,6 +2,7 @@ const Cart = require("../models/cart.model");
 const Product = require("../models/products.model");
 
 class CartRepository {
+  
   async getCart() {
     let cart = await Cart.findOne().populate("products.product");
     if (!cart) {
@@ -15,17 +16,14 @@ class CartRepository {
     if (!cart) {
       cart = await Cart.create({ products: [] });
     }
-
     const existing = cart.products.find(
       (p) => p.product.toString() === productId
     );
-
     if (existing) {
       existing.quantity += quantity;
     } else {
       cart.products.push({ product: productId, quantity });
     }
-
     await cart.save();
     return cart.populate("products.product");
   }
@@ -33,12 +31,10 @@ class CartRepository {
   async updateQuantity(productId, quantity) {
     const cart = await Cart.findOne();
     if (!cart) return null;
-
     const existing = cart.products.find(
       (p) => p.product.toString() === productId
     );
     if (!existing) return cart;
-
     existing.quantity = quantity <= 0 ? 1 : quantity;
     await cart.save();
     return cart.populate("products.product");
@@ -58,7 +54,6 @@ class CartRepository {
   async clearCart() {
     const cart = await Cart.findOne();
     if (!cart) return null;
-
     cart.products = [];
     await cart.save();
     return cart.populate("products.product");
@@ -80,5 +75,6 @@ class CartRepository {
       },
     };
   }
+
 }
 module.exports = new CartRepository();

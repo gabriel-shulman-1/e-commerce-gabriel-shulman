@@ -1,4 +1,9 @@
 const socket = io();
+const form = document.getElementById("productForm");
+let editingId = null;
+
+socket.emit("get-products");
+socket.emit("cart:getCount");
 
 window.updateQty = (id, diff) => {
   const input = document.getElementById(`qty-${id}`);
@@ -18,20 +23,6 @@ window.addToCart = (id) => {
   socket.emit("cart:add", { productId: id, quantity });
   socket.emit("cart:count");
 };
-
-socket.emit("cart:count");
-socket.on("cart:count", (count) => {
-  const btn = document.getElementById("cartCount");
-  if (btn) btn.innerText = `Cart (${count})`;
-});
-
-socket.on("products:updated", () => {
-  location.reload();
-});
-
-// CRUD MODAL (si usas el CRUD admin desde realtime)
-const form = document.getElementById("productForm");
-let editingId = null;
 
 window.editProduct = (id) => {
   editingId = id;
@@ -73,6 +64,21 @@ window.deleteProduct = (id) => {
     }
   });
 };
+
+socket.on("cart:count", (count) => {
+  const btn = document.getElementById("cartCount");
+  if (btn) {
+    if (count === 0) {
+      btn.innerHTML = '<i class="bi bi-cart"></i> Sin elementos';
+    } else {
+      btn.innerText = count + " elementos";
+    }
+  }
+});
+
+socket.on("products:updated", () => {
+  location.reload();
+});
 
 if (form) {
   form.addEventListener("submit", (e) => {

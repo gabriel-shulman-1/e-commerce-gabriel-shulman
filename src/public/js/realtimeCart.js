@@ -1,6 +1,7 @@
 const socket = io();
 
 socket.emit("cart:getAll");
+
 socket.emit("cart:getCount");
 
 socket.on("cart:count", (count) => {
@@ -11,6 +12,10 @@ socket.on("cart:count", (count) => {
 socket.on("cart:all", (cart) => {
   renderCart(cart);
 });
+
+window.clearCart = () =>{
+  socket.emit("cart:clear")
+}
 
 window.addToCart = (id) => {
   const value = parseInt(document.getElementById(`qty-${id}`).value, 10);
@@ -32,16 +37,13 @@ window.removeFromCart = (id) => {
 function renderCart(cart) {
   const tbody = document.getElementById("cartBody");
   const totalDiv = document.getElementById("cartTotal");
-
   if (!cart || !cart.products || cart.products.length === 0) {
     tbody.innerHTML = `<tr><td colspan="4" class="text-center">Carrito vacío</td></tr>`;
-    totalDiv.innerText = "";
+    totalDiv.innerText = "No hay elementos en el carrito";
     return;
   }
-
   tbody.innerHTML = "";
   let total = 0;
-
   cart.products.forEach((item) => {
     const subtotal = item.quantity * item.product.price;
     total += subtotal;
@@ -60,9 +62,8 @@ function renderCart(cart) {
       </tr>
     `;
   });
-
   totalDiv.innerText = `Total: $${total}`;
-}
+};
 
 document.getElementById("purchaseBtn").addEventListener("click", () => {
   socket.emit("cart:purchase");
