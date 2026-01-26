@@ -51,6 +51,11 @@ app.use(
   "/bootstrap-icons",
   express.static(path.join(__dirname, "node_modules", "bootstrap-icons"))
 );
+app.use((req, res, next) => {
+  req.io = io;
+  next();
+});
+
 // rutas HTTP
 const products = require("./src/routes/products.routes");
 const cart = require("./src/routes/cart.routes");

@@ -6,6 +6,9 @@ const ProductRepo = {
   async findById(id) {
     return Product.findOne({ _id: id });
   },
+  async findByCode(code) {
+  return Product.findOne({ code }).lean();
+},
   async create(data) {
     return Product.create(data);
   },

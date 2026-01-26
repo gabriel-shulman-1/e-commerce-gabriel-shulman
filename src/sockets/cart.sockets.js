@@ -42,11 +42,11 @@ module.exports = (io, socket) => {
   });
 
   socket.on("cart:purchase", async () => {
-  try {
-    await CartService.purchase();
-    socket.emit("cart:purchase:done", { ok: true });
-  } catch (err) {
-    socket.emit("cart:purchase:error", err.message);
-  }
-});
+    try {
+      await CartService.purchase();
+      socket.emit("cart:purchase:done", { ok: true });
+    } catch (err) {
+      socket.emit("cart:purchase:error", err.message);
+    }
+  });
 };

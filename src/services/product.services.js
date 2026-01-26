@@ -10,8 +10,8 @@ const ProductService = {
     return product;
   },
   async create(data) {
-    const exists = await ProductRepo.findById(data.id);
-    if (exists) throw new Error("Product id already exists");
+    const exists = await ProductRepo.findByCode(data.code);
+    if (exists) throw new Error("Product code already exists");
     return ProductRepo.create(data);
   },
   async update(id, data) {
@@ -21,7 +21,7 @@ const ProductService = {
     return updated;
   },
   async delete(id) {
-    console.log(id)
+    console.log(id);
     const deleted = await ProductRepo.delete(id);
     if (!deleted) throw new Error("Product not found");
     return deleted;

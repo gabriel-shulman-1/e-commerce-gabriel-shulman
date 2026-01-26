@@ -3,7 +3,7 @@ const ProductService = require("../services/product.services");
 const ProductController = {
   list: async (req, res) => {
     try {
-      const products = await ProductService.findAll();
+      const products = await ProductService.list();
       res.json(products);
     } catch (err) {
       res.status(400).json({ error: err.message });
@@ -11,8 +11,10 @@ const ProductController = {
   },
   getById: async (req, res) => {
     try {
-      console.log(req.params.id);
       const productById = await ProductService.findById(req.params.id);
+      if (!productById) {
+        return res.status(404).json({ error: "Producto no encontrado" });
+      }
       res.json(productById);
     } catch (err) {
       res.status(400).json({ error: err.message });
@@ -70,12 +72,12 @@ const ProductController = {
   },
   editProduct: async (req, res) => {
     try {
-    const product = await ProductRepository.findById(req.params.id);
-    if (!product) return res.status(404).json({ error: "No encontrado" });
-    res.json(product);
-  } catch (e) {
-    res.status(500).json({ error: "Error del servidor" });
-  }
+      const product = await ProductService.findById(req.params.id);
+      if (!product) return res.status(404).json({ error: "No encontrado" });
+      res.json(product);
+    } catch (e) {
+      res.status(500).json({ error: "Error del servidor" });
+    }
   },
 };
 
