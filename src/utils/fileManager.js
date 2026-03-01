@@ -5,7 +5,6 @@ class FileManager {
   constructor(filename) {
     this.path = path.join(__dirname, "..", "data", filename);
   }
-
   async read() {
     try {
       const data = await fs.readFile(this.path, "utf-8");
@@ -14,7 +13,6 @@ class FileManager {
       return [];
     }
   }
-
   async write(data) {
     await fs.writeFile(this.path, JSON.stringify(data, null, 2));
   }

@@ -7,15 +7,19 @@ const http = require("http");
 const { Server } = require("socket.io");
 const productSocket = require("./src/sockets/products.sockets.js");
 const cartSocket = require("./src/sockets/cart.sockets.js");
-const app = express();
 const PORT = process.env.PORT || 8080;
 const passport = require("passport");
 const initializePassport = require("./src/config/passport.config");
+const products = require("./src/routes/products.routes");
+const cart = require("./src/routes/cart.routes");
+const views = require("./src/routes/views.routes");
+const authRoutes = require("./src/routes/auth.routes");
+const sessionsRoutes = require("./src/routes/sessions.routes");
+const app = express();
 
 // HTTP + Socket
 const server = http.createServer(app);
 const io = new Server(server);
-console.log("Inicializando Passport...", process.env.JWT_SECRET,process.env.MONGO_DB_PASSWORD);
 mongoose
 .connect(
   `mongodb+srv://gesover_db_user:${process.env.MONGO_DB_PASSWORD}@cluster0.m9sroh3.mongodb.net/?appName=Cluster0`,
@@ -64,12 +68,6 @@ app.use((req, res, next) => {
 
 initializePassport();
 app.use(passport.initialize());
-const products = require("./src/routes/products.routes");
-const cart = require("./src/routes/cart.routes");
-const views = require("./src/routes/views.routes");
-const authRoutes = require("./src/routes/auth.routes");
-const sessionsRoutes = require("./src/routes/sessions.routes");
-
 app.use("/api/auth", authRoutes);
 app.use("/api/sessions", sessionsRoutes);
 app.use("/api/cart", cart);

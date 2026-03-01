@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET_KEY, JWT_EXPIRES_IN } = process.env;
+const { JWT_SECRET, JWT_EXPIRES_IN } = process.env;
 const generateToken = (user) => {
     return jwt.sign(
         {
@@ -7,7 +7,7 @@ const generateToken = (user) => {
             email: user.email,
             role: user.role
         },
-        JWT_SECRET_KEY,
+        JWT_SECRET,
         {
             expiresIn: JWT_EXPIRES_IN
         }
@@ -15,7 +15,7 @@ const generateToken = (user) => {
 };
 const verifyToken = (token) => {
     try {
-        return jwt.verify(token, JWT_SECRET_KEY);
+        return jwt.verify(token, JWT_SECRET);
     } catch (error) {
         return null;
     }
