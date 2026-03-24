@@ -1,26 +1,25 @@
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET, JWT_EXPIRES_IN } = process.env;
-const generateToken = (user) => {
+const jwtToken = {
+  generateToken: async = (user) => {
     return jwt.sign(
-        {
-            userId: user._id,
-            email: user.email,
-            role: user.role
-        },
-        JWT_SECRET,
-        {
-            expiresIn: JWT_EXPIRES_IN
-        }
+      {
+        userId: user._id,
+        email: user.email,
+        role: user.role,
+      },
+      JWT_SECRET,
+      {
+        expiresIn: JWT_EXPIRES_IN,
+      },
     );
-};
-const verifyToken = (token) => {
+  },
+  verifyToken: async = (token) => {
     try {
-        return jwt.verify(token, JWT_SECRET);
+      return jwt.verify(token, JWT_SECRET);
     } catch (error) {
-        return null;
+      return null;
     }
+  },
 };
-module.exports = {
-    generateToken,
-    verifyToken
-};
+module.exports = jwtToken;

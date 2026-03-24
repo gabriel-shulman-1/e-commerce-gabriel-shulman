@@ -1,0 +1,7 @@
+const isAdmin =(user)=>{
+    console.log(user)
+    return user & user.role === "admin";
+};
+module.exports = {
+    isAdmin
+};

@@ -82,6 +82,14 @@ const viewController = {
       console.error(error);
       res.status(500).send("Error al cargar la vista");
     }
+  },
+  login: async (req,res)=>{
+    try{
+      res.render("auth/login");
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error al cargar la vista");
+    }
   }
 };
 module.exports = viewController;

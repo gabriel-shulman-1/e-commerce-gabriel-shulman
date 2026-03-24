@@ -16,7 +16,8 @@ const views = require("./src/routes/views.routes");
 const authRoutes = require("./src/routes/auth.routes");
 const sessionsRoutes = require("./src/routes/sessions.routes");
 const app = express();
-
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
 // HTTP + Socket
 const server = http.createServer(app);
 const io = new Server(server);
@@ -32,7 +33,7 @@ mongoose
 });
 // middlewares
 app.use(express.json());
-
+app.use(express.urlencoded({ extended: true }));
 // archivos estáticos
 app.use(express.static(path.join(__dirname, "src", "public")));
 
