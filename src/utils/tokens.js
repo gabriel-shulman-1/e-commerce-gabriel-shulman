@@ -4,7 +4,8 @@ const tokenUtil = {
         const payload = {
             id: user._id.toString(),
             email: user.email,
-            role: user.role
+            role: user.role,
+            first_name: user.first_name
         };
         return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
     },

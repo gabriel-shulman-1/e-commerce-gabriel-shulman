@@ -1,5 +1,5 @@
 const passport = require("passport");
-const { generateToken } = require("../utils/tokens");
+const jwtToken = require("../utils/tokens");
 const UserDTO = require("../dto/user.dto");
 
 const login = (req, res, next) => {
@@ -11,7 +11,7 @@ const login = (req, res, next) => {
         message: info?.message || "Credenciales inválidas"
       });
     }
-    const token = generateToken(user);
+    const token = jwtToken.generateToken(user);
     return res.json({
       status: "success",
       access_token: token

@@ -10,21 +10,34 @@ socket.on("products-list", (products) => {
   products.forEach((p) => {
     const col = document.createElement("div");
     col.className = "col-md-4 mb-3";
+    const controls = p.stock === 0
+      ? `
+        <div class="alert alert-danger text-center mb-0">
+          Sin stock
+        </div>
+      `
+      : `
+        <div class="d-flex align-items-center gap-2">
+          <a href="/product/${p._id}" class="btn btn-primary btn-sm">
+            <i class="bi bi-search"></i>
+          </a>
+          <div class="input-group" style="width: 140px;">
+            <button onclick="updateQty('${p._id}', -1)" class="btn btn-outline-secondary">-</button>
+            <input id="qty-${p._id}" type="number" class="form-control text-center" value="1" min="1" max="${p.stock}">
+            <button onclick="updateQty('${p._id}', +1)" class="btn btn-outline-secondary">+</button>
+          </div>
+          <button onclick="addToCart('${p._id}')" class="btn btn-success btn-sm">
+            <i class="bi bi-cart-plus"></i>
+          </button>
+        </div>
+      `;
     col.innerHTML = `
       <div class="card">
         <div class="card-body">
           <h5>${p.title}</h5>
           <p>${p.description}</p>
           <p><strong>$${p.price}</strong> | Stock: ${p.stock}</p>
-          <div class="d-flex align-items-center gap-2">
-            <a href="/product/${p._id}" class="btn btn-primary btn-sm"><i class="bi bi-search"></i></a>
-            <div class="input-group" style="width: 140px;">
-              <button onclick="updateQty('${p._id}', -1)" class="btn btn-outline-secondary">-</button>
-              <input id="qty-${p._id}" type="number" class="form-control text-center" value="1" min="1" max="${p.stock}">
-              <button onclick="updateQty('${p._id}', +1)" class="btn btn-outline-secondary">+</button>
-            </div>
-            <button onclick="addToCart('${p._id}')" class="btn btn-success btn-sm"><i class="bi bi-cart-plus"></i></button>
-          </div>
+          ${controls}
         </div>
       </div>
     `;

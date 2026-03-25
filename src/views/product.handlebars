@@ -14,6 +14,9 @@
       <p><strong>Precio:</strong> ${{product.price}}</p>
       <p><strong>Stock:</strong> {{product.stock}}</p>
       <div class="d-flex align-items-center gap-2">
+        {{#if (eq product.stock 0)}}
+        <p class="text-danger">Sin stock</p>
+        {{else}}
         <div class="input-group">
           <button
             class="btn btn-outline-secondary"
@@ -39,6 +42,7 @@
         >
           Agregar al carrito
         </button>
+        {{/if}}
       </div>
 
       <div class="mt-3 ">

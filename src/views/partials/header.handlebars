@@ -1,17 +1,57 @@
-<header>
-  <nav class="navbar navbar-dark bg-dark mb-4">
+<header class="py-4 bg-dark">
+  <nav class="navbar navbar-dark bg-dark">
+
     <div class="container">
-      <a class="navbar-brand" href="/">Home</a>
-      <div>
-        <a class="btn btn-outline-warning" href="/createProduct">Gestionar
-          productos</a>
-        <a class="btn btn-outline-success" href="/products-rt">
-          Todos los productos
-        </a>
-        <a class="btn btn-outline-success" href="/products-filtered">
-          Buscar un producto
-        </a>
+      <div class="col">
+        <a class="navbar-brand" href="/">Home</a>
+        <p class="text-white">{{#if user}}
+            Bienvenido
+            {{user.first_name}}
+          {{/if}}
+        </p>
+        <p class="text-white">
+          {{#if (eq user.role "admin")}}
+            <i class="bi bi-check2-all text-success fs-5"></i>
+          {{else if (eq user.role "user")}}
+            <i class="bi bi-check text-primary fs-5"></i>
+          {{else}}
+            <i class="bi bi-x-lg text-danger fs-5"></i>
+          {{/if}}
+        </p>
       </div>
+
+      {{#if user}}
+        <div class="dropdown">
+          <button
+            class="btn btn-primary dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Bienvenido
+            {{user.first_name}}
+          </button>
+          <ul class="dropdown-menu">
+            {{#if (eq user.role "admin")}}
+            <li><a class="dropdown-item" href="/createProduct">Gestionar
+                productos</a></li>
+            {{/if}}
+            <li><a class="dropdown-item" href="/products-rt">Todos los productos</a></li>
+            <li><a class="dropdown-item" href="/products-filtered">Buscar un
+                producto</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><form action="/api/auth/logout" method="POST"><button
+                  type="submit"
+                  class="dropdown-item bg-danger text-white"
+                >Cerrar sesión</button></form></li>
+          </ul>
+        </div>
+      {{else}}
+        <p class="text-warning">
+          Necesitas ingresar con tu usuario para continuar
+        </p>
+      {{/if}}
+
     </div>
   </nav>
 </header>

@@ -1,4 +1,5 @@
 const ProductService = require("../services/product.services.js");
+const { forgotPassword } = require("./auth.controller.js");
 const viewController = {
   inicio: async (req, res) => {
     try {
@@ -71,25 +72,55 @@ const viewController = {
       res.status(500).send("Error al obtener productos");
     }
   },
-  createProduct : async (req,res) => {
+  createProduct: async (req, res) => {
     try {
       const products = await ProductService.list();
-      res.render("createProduct",{
-        title:"Gestionar productos",
-        products
-      })
+      res.render("createProduct", {
+        title: "Gestionar productos",
+        products,
+      });
     } catch (error) {
       console.error(error);
       res.status(500).send("Error al cargar la vista");
     }
   },
-  login: async (req,res)=>{
-    try{
-      res.render("auth/login");
+  login: async (req, res) => {
+    try {
+      res.render("auth/login", {
+        query: req.query,
+      });
     } catch (error) {
       console.error(error);
       res.status(500).send("Error al cargar la vista");
     }
-  }
+  },
+  register: async (req, res) => {
+    try {
+      res.render("auth/register");
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error al cargar la vista");
+    }
+  },
+  forgotPassword: async (req, res) => {
+    try {
+      res.render("auth/send-mail-password");
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error al cargar la vista");
+    }
+  },
+  resetPassword: async (req, res) => {
+    try {
+      const { token } = req.query;
+      if (!token) {
+        return res.send("Token inválido o ausente");
+      }
+      res.render("reset-password", { token });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error al cargar la vista");
+    }
+  },
 };
 module.exports = viewController;

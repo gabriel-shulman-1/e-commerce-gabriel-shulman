@@ -4,9 +4,10 @@ const jwtToken = {
   generateToken: async = (user) => {
     return jwt.sign(
       {
-        userId: user._id,
+        userId: user._id.toString(),
         email: user.email,
         role: user.role,
+        first_name: user.first_name
       },
       JWT_SECRET,
       {

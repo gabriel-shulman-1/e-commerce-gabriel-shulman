@@ -1,7 +1,6 @@
 const socket = io();
 
 socket.emit("cart:getAll");
-
 socket.emit("cart:getCount");
 
 socket.on("cart:count", (count) => {
@@ -70,10 +69,20 @@ document.getElementById("purchaseBtn").addEventListener("click", () => {
 });
 
 socket.on("cart:purchase:done", () => {
-  alert("Compra realizada con éxito");
+  Swal.fire({
+          icon: "success",
+          title: "Éxito",
+          text: result.message,
+          confirmButtonText: "Seguir comprando",
+        });
   window.location.href = "/products-filtered";
 });
 
 socket.on("cart:purchase:error", msg => {
-  alert("Error: " + msg);
+  Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: msg,
+          confirmButtonText: "Seguir comprando",
+        });
 });

@@ -46,7 +46,9 @@
         <strong>${{this.price}}</strong>
 
         <div class="d-flex align-items-center gap-2 mt-2">
-
+        {{#if (eq this.stock 0)}}
+        <p class="text-danger">Sin stock</p>
+        {{else}}
           <a href="/product/{{this._id}}" class="btn btn-primary btn-sm">
             <i class="bi bi-search"></i>
           </a>
@@ -60,7 +62,7 @@
           <button onclick="addToCart('{{this._id}}')" class="btn btn-success btn-sm">
             <i class="bi bi-cart-plus"></i>
           </button>
-
+        {{/if}}
         </div>
       </div>
     </div>

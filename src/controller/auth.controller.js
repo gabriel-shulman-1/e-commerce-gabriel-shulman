@@ -1,4 +1,3 @@
-//const User = require("../models/user.model");
 const {
   createHash,
   isValidPassword,
@@ -27,10 +26,7 @@ const authController = {
         password: createHash(password),
         role: "user",
       });
-      res.status(201).json({
-        message: "Usuario creado correctamente",
-        userId: newUser._id,
-      });
+      return res.redirect("/login?succes=Usuario creado correctamente "+first_name);
     } catch (error) {
       res.status(500).json({
         error: error.message,
@@ -52,7 +48,7 @@ const authController = {
         httpOnly: true,
         maxAge: 1000 * 60 * 60,
       });
-      return res.redirect("/createProduct");
+      return res.redirect("/");
     } catch (error) {
       return res.redirect("/login?error=Error interno");
     }
@@ -78,7 +74,7 @@ const authController = {
       <p>Este enlace expira en 1 hora</p>
     `,
       );
-      res.json({ message: "Email enviado", link: resetLink });
+      res.json({ message: "Email enviado", url: resetLink });
     } catch (error) {
       res.status(500).json({
         error: error.message,
@@ -88,7 +84,7 @@ const authController = {
   resetPassword: async (req, res) => {
     const { token, password } = req.body;
     try {
-      const decoded = await jwtToken.verifyToken(token, process.env.JWT_SECRET);
+      const decoded = jwtToken.verifyToken(token, process.env.JWT_SECRET);
       const user = await userRepository.getUserById(decoded.id);
       if (!user) {
         return res.status(404).json({ message: "Usuario no encontrado" });
@@ -108,6 +104,13 @@ const authController = {
         message: "Token inválido o expirado",
       });
     }
+  },
+  logout: (req, res) => {
+    res.clearCookie("token", {
+      httpOnly: true,
+      sameSite: "lax",
+    });
+    return res.redirect("/login");
   },
 };
 

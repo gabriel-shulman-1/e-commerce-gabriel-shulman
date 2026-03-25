@@ -1,11 +1,82 @@
-<h2>Registro</h2>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
 
-<form method="POST" action="/api/auth/register">
-  <input type="text" name="first_name" placeholder="Nombre" required />
-  <input type="text" name="last_name" placeholder="Apellido" required />
-  <input type="email" name="email" placeholder="Email" required />
-  <input type="password" name="password" placeholder="Password" required />
-  <button type="submit">Registrarse</button>
-</form>
+      <div class="card shadow">
+        <div class="card-body">
 
-<a href="/login">Ya tengo cuenta</a>
+          <h2 class="text-center mb-4">Registro</h2>
+
+          <form method="POST" action="/api/auth/register">
+
+            <div class="mb-3">
+              <label class="form-label">Nombre</label>
+              <input
+                type="text"
+                name="first_name"
+                class="form-control"
+                placeholder="Ingrese su nombre"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Apellido</label>
+              <input
+                type="text"
+                name="last_name"
+                class="form-control"
+                placeholder="Ingrese su apellido"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input
+                type="email"
+                name="email"
+                class="form-control"
+                placeholder="Ingrese su email"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Contraseña</label>
+              <input
+                type="password"
+                name="password"
+                class="form-control"
+                placeholder="Ingrese su contraseña"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Nivel de usuario</label>
+              <select class="form-select" name="role">
+                <option selected>Seleccione el nivel de usuario</option>
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">
+                Registrarse
+              </button>
+            </div>
+
+          </form>
+
+          <div class="text-center mt-3">
+            <a href="/login">Ya tengo cuenta</a>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

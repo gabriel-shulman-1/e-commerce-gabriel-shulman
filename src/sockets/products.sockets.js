@@ -1,7 +1,6 @@
 const ProductService = require("../services/product.services.js");
 
 module.exports = (io, socket) => {
-  console.log("Socket products listo");
   socket.on("get-products", async () => {
     const products = await ProductService.list();
     socket.emit("products-list", products);
