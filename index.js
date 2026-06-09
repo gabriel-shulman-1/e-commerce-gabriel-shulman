@@ -17,26 +17,31 @@ const authRoutes = require("./src/routes/auth.routes");
 const sessionsRoutes = require("./src/routes/sessions.routes");
 const app = express();
 const cookieParser = require("cookie-parser");
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./src/config/swagger');
 app.use(cookieParser());
 // HTTP + Socket
 const server = http.createServer(app);
 const io = new Server(server);
+// Build MongoDB connection string using env vars
+const mongoUser = process.env.MONGO_DB_USER || "gesover_db_user";
+const mongoPass = process.env.MONGO_DB_PASSWORD || "";
+const mongoDbName = process.env.MONGO_DB_NAME || "ecommerce";
+const encodedPass = encodeURIComponent(mongoPass);
+const mongoUri = `mongodb://${mongoUser}:${mongoPass}@cluster0.m9sroh3.mongodb.net/?appName=Cluster0`;
 mongoose
-.connect(
-  `mongodb+srv://gesover_db_user:${process.env.MONGO_DB_PASSWORD}@cluster0.m9sroh3.mongodb.net/?appName=Cluster0`,
-)
-.then(() => {
-  console.log("conectado a Mongo Atlas");
-})
-.catch((error) => {
-  console.log("No se pudo conectar");
-});
+  .connect(mongoUri)
+  .then(() => {
+    console.log("conectado a Mongo Atlas");
+  })
+  .catch((error) => {
+    console.error("No se pudo conectar a Mongo Atlas:", error.message || error);
+  });
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // archivos estáticos
 app.use(express.static(path.join(__dirname, "src", "public")));
-
 // handlebars
 app.engine(
   "handlebars",
@@ -78,6 +83,11 @@ io.on("connection", (socket) => {
   productSocket(io, socket);
   cartSocket(io, socket);
 });
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec)
+);
 
 // server
 server.listen(PORT, () => {
