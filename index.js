@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-const mongoose = require("mongoose");
 const handlebars = require("express-handlebars");
 const path = require("path");
 const http = require("http");
@@ -15,28 +14,22 @@ const cart = require("./src/routes/cart.routes");
 const views = require("./src/routes/views.routes");
 const authRoutes = require("./src/routes/auth.routes");
 const sessionsRoutes = require("./src/routes/sessions.routes");
+const connectMongo = require("./src/config/mongoose.config");
 const app = express();
 const cookieParser = require("cookie-parser");
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./src/config/swagger');
+//test
+const request = require("supertest");
+const { createApp } = require("../src/app");
+const testApp = createApp();
+
 app.use(cookieParser());
 // HTTP + Socket
 const server = http.createServer(app);
 const io = new Server(server);
-// Build MongoDB connection string using env vars
-const mongoUser = process.env.MONGO_DB_USER || "gesover_db_user";
-const mongoPass = process.env.MONGO_DB_PASSWORD || "";
-const mongoDbName = process.env.MONGO_DB_NAME || "ecommerce";
-const encodedPass = encodeURIComponent(mongoPass);
-const mongoUri = `mongodb://${mongoUser}:${mongoPass}@cluster0.m9sroh3.mongodb.net/?appName=Cluster0`;
-mongoose
-  .connect(mongoUri)
-  .then(() => {
-    console.log("conectado a Mongo Atlas");
-  })
-  .catch((error) => {
-    console.error("No se pudo conectar a Mongo Atlas:", error.message || error);
-  });
+// conexion a Mongo DB
+connectMongo();
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -69,9 +62,7 @@ app.use((req, res, next) => {
   req.io = io;
   next();
 });
-
 // rutas HTTP
-
 initializePassport();
 app.use(passport.initialize());
 app.use("/api/auth", authRoutes);
@@ -88,7 +79,6 @@ app.use(
   swaggerUi.serve,
   swaggerUi.setup(swaggerSpec)
 );
-
 // server
 server.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);

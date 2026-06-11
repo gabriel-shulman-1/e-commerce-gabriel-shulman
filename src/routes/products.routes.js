@@ -224,4 +224,5 @@ router.post("/purchase", authMiddleware, authLevel("admin"), ProductController.p
  *         description: Error del servidor
  */
 router.get("/products/edit/:id", authMiddleware, authLevel("admin"), ProductController.editProduct);
+
 module.exports = router;
