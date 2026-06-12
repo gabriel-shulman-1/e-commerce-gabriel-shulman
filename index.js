@@ -21,7 +21,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./src/config/swagger');
 //test
 const request = require("supertest");
-const { createApp } = require("../src/app");
+const { createApp } = require("./src/app.js");
 const testApp = createApp();
 
 app.use(cookieParser());
