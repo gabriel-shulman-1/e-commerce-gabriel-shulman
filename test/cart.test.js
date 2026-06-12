@@ -27,14 +27,25 @@ describe("Cart API", () => {
 
   describe("GET /api/cart", () => {
     test("debe devolver el carrito", async () => {
+      const { faker } = require("@faker-js/faker");
       const fakeCart = {
-        products: [],
+        products: [
+          {
+            productId: faker.database.mongodbObjectId(),
+            name: faker.commerce.productName(),
+            price: Number(faker.commerce.price()),
+            quantity: faker.number.int({ min: 1, max: 5 }),
+          },
+          {
+            productId: faker.database.mongodbObjectId(),
+            name: faker.commerce.productName(),
+            price: Number(faker.commerce.price()),
+            quantity: faker.number.int({ min: 1, max: 3 }),
+          },
+        ],
       };
-
-      CartService.getCart.mockResolvedValue(fakeCart);
-
+      CartService.getCart.mockResolvedValueOnce(fakeCart);
       const response = await request(app).get("/api/cart");
-
       expect(response.status).toBe(200);
       expect(response.body).toEqual(fakeCart);
     });
@@ -43,11 +54,8 @@ describe("Cart API", () => {
   describe("GET /api/cart/qty", () => {
     test("debe devolver la cantidad total", async () => {
       CartService.getCount.mockResolvedValue(3);
-
       const response = await request(app).get("/api/cart/qty");
-
       expect(response.status).toBe(200);
-
       expect(response.body).toEqual({
         count: 3,
       });
@@ -58,7 +66,6 @@ describe("Cart API", () => {
     test("debe agregar un producto", async () => {
       const { faker } = require("@faker-js/faker");
       const productId = faker.string.uuid();
-
       const fakeCart = {
         products: [
           {
@@ -81,17 +88,13 @@ describe("Cart API", () => {
     test("debe actualizar la cantidad de un producto", async () => {
       const { faker } = require("@faker-js/faker");
       const productId = faker.string.uuid();
-
       const fakeCart = {
         updated: true,
       };
-
       CartService.update.mockResolvedValue(fakeCart);
-
       const response = await request(app).put(`/api/cart/${productId}`).send({
         quantity: 5,
       });
-
       expect(response.status).toBe(200);
       expect(response.body).toEqual(fakeCart);
     });
@@ -101,15 +104,11 @@ describe("Cart API", () => {
     test("debe eliminar un producto", async () => {
       const { faker } = require("@faker-js/faker");
       const productId = faker.string.uuid();
-
       const fakeCart = {
         removed: true,
       };
-
       CartService.remove.mockResolvedValue(fakeCart);
-
       const response = await request(app).delete(`/api/cart/${productId}`);
-
       expect(response.status).toBe(200);
       expect(response.body).toEqual(fakeCart);
     });
@@ -120,11 +119,8 @@ describe("Cart API", () => {
       const fakeCart = {
         products: [],
       };
-
       CartService.clear.mockResolvedValue(fakeCart);
-
       const response = await request(app).delete("/api/cart");
-
       expect(response.status).toBe(200);
       expect(response.body).toEqual(fakeCart);
     });

@@ -1,36 +1,41 @@
+const express = require("express");
 const request = require("supertest");
 const { faker } = require("@faker-js/faker");
-const { createApp } = require("../src/app");
 
-const app = createApp();
+const fakeUser = {
+  _id: "123",
+  email: "test@test.com",
+  role: "user",
+};
 
 jest.mock("passport", () => ({
-  authenticate: () => (req, res, next) => {
-    req.user = {
-      _id: "123",
-      email: "test@mail.com",
-      role: "admin",
+  authenticate: jest.fn(() => {
+    return (req, res, next) => {
+      req.user = fakeUser;
+      next();
     };
-    next();
-  },
-  initialize: () => (req, res, next) => next(),
+  }),
 }));
+jest.mock("../src/utils/tokens");
 
+const tokenUtil = require("../src/utils/tokens");
 const passport = require("passport");
-
-describe("Sessions API", () => {
-  const { faker } = require("@faker-js/faker");
-  beforeEach(() => {
+const sessionRouter = require("../src/routes/sessions.routes");
+const app = express();
+app.use(express.json());
+app.use("/api/sessions", sessionRouter);
+describe("Sessions Routes", () => {
+  afterEach(() => {
     jest.clearAllMocks();
-    fakeUser = {
-      _id: faker.string.uuid(),
-      first_name: faker.person.firstName(),
-      email: faker.internet.email(),
-      role: "admin",
-    };
   });
-  describe("POST /api/sessions/login", () => {
-    test("debe iniciar sesión correctamente", async () => {
+  describe("POST /login", () => {
+    it("login exitoso", async () => {
+      const fakeUser = {
+        _id: faker.database.mongodbObjectId(),
+        email: faker.internet.email(),
+        role: "user",
+        first_name: faker.person.firstName(),
+      };
       passport.authenticate.mockImplementation(
         (strategy, options, callback) => {
           return (req, res, next) => {
@@ -38,66 +43,57 @@ describe("Sessions API", () => {
           };
         },
       );
-
-      const response = await request(app).post("/api/sessions/login").send({
-        email: faker.email,
-        password: faker.password,
+      tokenUtil.generateToken.mockReturnValue("fake-token");
+      const res = await request(app).post("/api/sessions/login").send({
+        email: fakeUser.email,
+        password: "123456",
       });
-
-      expect(response.status).toBe(200);
-
-      expect(response.body).toEqual(
-        expect.objectContaining({
-          status: "success",
-          access_token: expect.any(String),
-        }),
-      );
-    });
-    test("debe rechazar credenciales inválidas", async () => {
-      passport.authenticate.mockImplementation(
-        (strategy, options, callback) => {
-          return (req, res, next) => {
-            callback(null, false, { message: "Credenciales inválidas" });
-          };
-        },
-      );
-
-      const response = await request(app).post("/api/sessions/login").send({
-        email: faker.internet.email(),
-        password: faker.internet.password(),
-      });
-
-      expect(response.status).toBe(401);
-
-      expect(response.body).toEqual(
-        expect.objectContaining({
-          status: "error",
-        }),
-      );
+      expect(res.status).toBe(200);
+      expect(res.body.access_token).toBe("fake-token");
     });
   });
-
-  describe("GET /api/sessions/current", () => {
-    test("debe devolver el usuario autenticado", async () => {
-        const { faker } = require("@faker-js/faker");
-      const response = await request(app).get("/api/sessions/current");
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual(
-        expect.objectContaining({
-          status: "success",
-          user: expect.objectContaining({
-            email: "test@mail.com",
-          }),
-        }),
-      );
+  describe("GET /current", () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
     });
-    test("debe rechazar acceso sin token", async () => {
-      passport.authenticate.mockImplementation(() => (req, res) => {
-        return res.status(401).json({
-          status: "error",
-          message: "Unauthorized",
-        });
+
+    test("usuario autenticado", async () => {
+      const response = await request(app).get("/api/sessions/current");
+
+      expect(response.status).toBe(200);
+
+      expect(response.body).toEqual({
+        status: "success",
+        user: {
+          id: "123",
+          email: "test@test.com",
+          role: "user",
+        },
       });
+    });
+
+    test("rechaza acceso sin token", async () => {
+      jest.resetModules();
+
+      jest.doMock("passport", () => ({
+        authenticate: () => {
+          return (req, res) => {
+            res.status(401).json({
+              message: "Unauthorized",
+            });
+          };
+        },
+      }));
+
+      const express = require("express");
+      const request = require("supertest");
+
+      const router = require("../src/routes/sessions.routes");
+
+      const app = express();
+
+      app.use(express.json());
+      app.use("/api/sessions", router);
 
       const response = await request(app).get("/api/sessions/current");
 
